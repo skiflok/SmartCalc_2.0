@@ -31,7 +31,7 @@ class Controller {
    * @param expression строка с математическим выражением в прямой форме
    * @return результат расчета
    */
-  double Calculation(std::string expression) {
+  double Calculation(std::string &expression) {
 	return 0;
   }
 
@@ -41,7 +41,7 @@ class Controller {
    * @param x значение, если выражение пришло в виде функции
    * @return результат расчета
    */
-  double Calculation(std::string expression, double x) {
+  double Calculation(std::string &expression, double &x) {
 	return 0;
   }
 
@@ -52,9 +52,9 @@ class Controller {
  */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(DataPlot data_plot);
 
-  void CreditCalculation(DataCredit data_credit);
+  DataCredit CreditCalculation(DataCredit &data_credit);
 
-  void DebitCalculation(DataDeposit data_deposit);
+  DataDeposit DebitCalculation(DataDeposit &data_deposit);
 
  private:
   Model *model_ = new Model();
