@@ -1,7 +1,8 @@
 # 'Google_test' is the subproject name
 cmake_minimum_required(VERSION 3.21.1)
-project(Google_tests)
 
+project(Google_tests)
+set(CMAKE_CXX_STANDARD 17)
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -16,10 +17,10 @@ FetchContent_MakeAvailable(googletest)
 #add_executable(Google_Tests_run tests_map.cc ../src/sorted_container/associative_container/s21_map.h)
 
 
-#set(HEADER_FILES
-#        ../model/kernel/parser.h
-#        )
-#
+set(HEADER_FILES
+        ../model/kernel/parser.h
+        )
+
 set(SOURCE_FILES
         ../model/kernel/validator.cc
         ../model/kernel/parser.cc
@@ -30,9 +31,9 @@ set(SOURCE_FILES
 #        s21_matrix_oop.cpp
 #        s21_matrix_oop.h)
 
-#add_library(parser STATIC ${SOURCE_FILES} ${HEADER_FILES})
+add_library(parser STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
 
-add_executable(Google_Tests_run tests.cc ${SOURCE_FILES})
+add_executable(Google_Tests_run tests.cc)
 
-target_link_libraries(Google_Tests_run gtest gtest_main)
+target_link_libraries(Google_Tests_run gtest gtest_main parser)
