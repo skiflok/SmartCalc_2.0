@@ -7,17 +7,21 @@
 #include "../model/kernel/calculator.cc"
 #include "../model/kernel/validator.cc"
 
+#include "../controller/controller.h"
+
 using std::cout;
 using std::endl;
+using namespace s21;
 
 class Calculator_test : public ::testing::Test {
 protected:
     void SetUp() override {
-
     }
-
-
+    Controller controller;
 };
+
+
+
 
 TEST_F(Calculator_test, simple_expression_to_rpn) {
     std::string expression = "2+3*2-5/2^4";

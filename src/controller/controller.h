@@ -21,7 +21,10 @@ class Controller {
    * @param expression строка с математическим выражением в прямой форме
    * @return результат расчета
    */
-  double Calculation(std::string &expression) { return 0; }
+  double Calculation(std::string &expression) {
+    //TODO try catch???
+    return model_.Calculation(expression);
+  }
 
   /**
    * Выполняет расчет выражения
@@ -54,7 +57,7 @@ class Controller {
   DataDeposit DebitCalculation(DataDeposit &data_deposit);
 
  private:
-  Model *model_ = new Model();
+  Model model_{};
 };
 
 }  // namespace s21
