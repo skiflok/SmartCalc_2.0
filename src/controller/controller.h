@@ -23,7 +23,14 @@ class Controller {
    */
   double Calculation(std::string &expression) {
     // TODO try catch???
-    return model_.Calculation(expression);
+    double result{};
+
+    try {
+      result = model_.Calculation(expression);
+    } catch (...) {
+      throw std::invalid_argument("Invalid input");
+    }
+    return result;
   }
 
   /**
