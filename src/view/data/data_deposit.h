@@ -5,7 +5,7 @@
 #ifndef SMARTCALC_2_0_SRC_VIEW_DATA_DATA_DEPOSIT_H_
 #define SMARTCALC_2_0_SRC_VIEW_DATA_DATA_DEPOSIT_H_
 
-class data_deposit {
+class DataDeposit {
 
 };
 

@@ -21,10 +21,6 @@ class Model {
  public:
   Model() {}
 
-//  double* GetData() {
-//	return data_;
-//  }
-
   int Solution(char *str, double *data_) {
 	return main_solution(str, data_);
   }
