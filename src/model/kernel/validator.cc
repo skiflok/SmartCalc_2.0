@@ -2,11 +2,10 @@
 // Created by Qyburn Bongo on 3/11/23.
 //
 #include <string>
-//#include  <cstring>
 
 #include "validator.h"
-#define success  true;
-#define failure  false;
+#define success  false;
+#define failure  true;
 
 
 bool s21::Validator::CheckNumber(size_t &index) const {
@@ -25,7 +24,7 @@ bool s21::Validator::CheckNumber(size_t &index) const {
     return err;
 }
 
-bool s21::Validator::IsValid() const {
+bool s21::Validator::IsNotValid() const {
     bool error = success;
     int brck_open_count{}, brck_close_count{};
     char check[] = "+-*/^m";

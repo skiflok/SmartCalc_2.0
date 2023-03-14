@@ -28,8 +28,7 @@ class Model {
    */
   double Calculation(std::string &expression) {
     Validator validator(expression);
-    validator.IsValid();
-    if (!validator.IsValid()) {
+    if (validator.IsNotValid()) {
       throw std::invalid_argument("Invalid input");
     }
     Parser parser(expression);
@@ -53,7 +52,7 @@ class Model {
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
       DataPlot data_plot) {
     Validator validator(data_plot.GetExpression());
-    if (!validator.IsValid()) {
+    if (!validator.IsNotValid()) {
       throw std::invalid_argument("Invalid input");
     }
     Parser parser(data_plot.GetExpression());

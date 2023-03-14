@@ -113,7 +113,7 @@ TEST_F(Calculator_test, ParseOfDigitFromExpression) {
   cout << res << endl;
 }
 
-TEST_F(Calculator_test, IzValid) {
+TEST_F(Calculator_test, IsNotValid) {
   std::string expression = "(2)^(-1/2)";
   //    std::string expression = "25.58+89.47";
   //    std::string expression =
@@ -126,9 +126,4 @@ TEST_F(Calculator_test, IzValid) {
   double res = controller.Calculation(expression);
 
   cout << res << endl;
-}
-
-int main(int argc, char *argv[]) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -15,7 +15,7 @@ class Validator {
 
   ~Validator() = default;
 
-  bool IsValid() const;
+  bool IsNotValid() const;
 
  private:
   bool CheckNumber(size_t &index) const;
