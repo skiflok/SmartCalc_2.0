@@ -114,7 +114,9 @@ TEST_F(Calculator_test, ParseOfDigitFromExpression) {
 }
 
 TEST_F(Calculator_test, IsNotValid) {
-  std::string expression = "(2)^(-1/2)";
+//  std::string expression = "(2)^(-1/2)";
+//    std::string expression = "9.47+1.1*5";
+   std::string expression = "2.58e-1*1+80.8";
   //    std::string expression = "25.58+89.47";
   //    std::string expression =
   //    "(5)+(1+2)*4*(-12)+cos(2*7.5-2)+sin(cos(2*5))-sqrt(2^log(5-1))+(1)+ln(5)+(1)";

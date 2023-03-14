@@ -11,7 +11,8 @@
 bool s21::Validator::CheckNumber(size_t &index) const {
     bool err = success;
     int count_dot{};
-    for (auto i = index; i < expression_.size(); ++i) {
+    auto i = index;
+    for (; i < expression_.size(); ++i) {
         char c = expression_[i];
         if (isdigit(c) || ((c == '.'))) {
             if (c == '.') count_dot++;
@@ -21,6 +22,7 @@ bool s21::Validator::CheckNumber(size_t &index) const {
         }
     }
     if (count_dot > 1) err = failure;
+    index = i;
     return err;
 }
 
@@ -37,6 +39,7 @@ bool s21::Validator::IsNotValid() const {
         char prev{};
         if (isdigit(current) && next == '.') {
             error = CheckNumber(i);
+            if (i > last) i = last;
             current = expression_[i];
             next = expression_[i + 1];
         }
