@@ -22,7 +22,7 @@ class Controller {
    * @return результат расчета
    */
   double Calculation(std::string &expression) {
-    //TODO try catch???
+    // TODO try catch???
     return model_.Calculation(expression);
   }
 

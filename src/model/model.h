@@ -33,8 +33,6 @@ class Model {
       throw std::invalid_argument("Invalid input");
     }
     Parser parser(expression);
-//    parser.ExpressionToRpn();
-//    std::queue<std::string> rpn_expr = parser.GetRpn();
     Calculator calculator(parser.GetRpn());
     double result{};
     try {
@@ -71,7 +69,6 @@ class Model {
     }
 
     return res;
-
   }
 
   DataCredit CreditCalculation(DataCredit &data_credit);
