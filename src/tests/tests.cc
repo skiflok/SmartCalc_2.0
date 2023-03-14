@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include "../model/kernel/calculator.cc"
-#include "../model/kernel/validation.cc"
+#include "../model/kernel/validator.cc"
 
 using std::cout;
 using std::endl;
@@ -111,7 +111,7 @@ TEST_F(Calculator_test, IzValid) {
 //    std::string expression = " ";
     bool error{};
 
-    s21::Validation valid(expression);
+    s21::Validator valid(expression);
     error = valid.IsValid();
     cout << "________________" << endl;
     cout << error << endl;

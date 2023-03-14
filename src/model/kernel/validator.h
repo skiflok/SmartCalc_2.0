@@ -10,13 +10,13 @@
 
 namespace s21 {
 
-    class Validation {
+    class Validator {
 
     public:
 
-        explicit Validation(const std::string &expression) : expression_(expression) {}
+        explicit Validator(const std::string &expression) : expression_(expression) {}
 
-        ~Validation() = default;
+        ~Validator() = default;
 
 
         bool IsValid() const;

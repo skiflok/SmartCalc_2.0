@@ -143,8 +143,9 @@ double s21::Calculator::Calculate() {
             UnaryFunc(token);
         }
     }
-    if (isfinite(result)) error = 1;// TODO something
-    return result = numbers_.top();
+    result = numbers_.top();
+    if (isfinite(result)) error = 1;// TODO something throw Exception
+    return result;
 }
 
 void s21::Calculator::GetDigitFromRpn( const std::string &token) {

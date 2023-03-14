@@ -5,59 +5,82 @@
 #ifndef CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_
 #define CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_
 
-//#ifdef __cplusplus
-extern "C" {
-#include "s21_calc.h"
-}
-//#endif
-
-#include <vector>
+#include <queue>
 #include <string>
-#include "../view/plot_struct.h"
+#include <vector>
 
-//namespace s21 {
+#include "../view/data/data_credit.h"
+#include "../view/data/data_deposit.h"
+#include "../view/data/data_plot.h"
+#include "./kernel/calculator.h"
+#include "./kernel/calculator_plot.h"
+#include "./kernel/parser.h"
+#include "./kernel/validator.h"
+
+namespace s21 {
 
 class Model {
  public:
-  Model() {}
-
-  int Solution(char *str, double *data_) {
-	return main_solution(str, data_);
+  /**
+   * Выполняет расчет выражения
+   * @param expression строка с математическим выражением в прямой форме
+   * @return результат расчета
+   */
+  double Calculation(std::string &expression) {
+    Validator validator(expression);
+    if (!validator.IsValid()) {
+      throw std::invalid_argument("Invalid input");
+    }
+    Parser parser(expression);
+    Calculator calculator(parser.GetRpn());
+    double result{};
+    try {
+      result = calculator.Calculate();
+    } catch (...) {
+      throw std::invalid_argument("Calculation error");
+    }
+    return result;
   }
 
-  int Plot(PlotStruct ps, int n, double x_begin, double x_end, double h, double x, std::string inputStr) {
+  double Calculation(std::string &expression, double &x) { return 0; }
 
-	std::vector<double> x_vector, y_vector;
-	double res = 0;
-	int error_my = 0;
-//	int plot_error = 0;
-	std::string plotSrt;
+  /**
+   *
+   * @param data_plot
+   * @return
+   */
+  std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
+      DataPlot data_plot) {
+    Validator validator(data_plot.GetExpression());
+    if (!validator.IsValid()) {
+      throw std::invalid_argument("Invalid input");
+    }
+    Parser parser(data_plot.GetExpression());
 
-//	n = (x_end - x_begin) / h + 2;
+    CalculatorPlot calculator_plot(data_plot, parser.GetRpn());
 
-	if (!error_my) {
+    std::pair<std::vector<double>, std::vector<double>> res;
 
-	  for (int X = x_begin; X <= x_end; X += h) {
-		X = round(X * 1000000) / 1000000;
-		plotSrt = inputStr;
-		size_t pos;
-		while ((pos = plotSrt.find("x")) != plotSrt.npos) {
-		  plotSrt.replace(pos, pos + plotSrt.length(), std::to_string(X));
-		}
-//		if (plot_error) {
-//		  continue;
-//		}
-		x_vector.push_back(X);
-		y_vector.push_back(res);
+    try {
+      res = calculator_plot.PlotCalculation();
+    } catch (...) {
+      throw;
+    }
 
-	  }
-	}
+    return res;
+
   }
+
+  DataCredit CreditCalculation(DataCredit &data_credit);
+
+  DataDeposit DebitCalculation(DataDeposit &data_deposit);
 
  private:
-
+  //  Calculator calculator_;
+  //  Parser parser_;
+  //  Validator validator_;
 };
 
-//}
+}  // namespace s21
 
-#endif //CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_
+#endif  // CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_

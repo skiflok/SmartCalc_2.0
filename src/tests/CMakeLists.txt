@@ -13,7 +13,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_executable(Google_Tests_run tests.cc  )
+add_executable(Google_Tests_run tests.cc)
 #add_executable(Google_Tests_run tests_map.cc ../src/sorted_container/associative_container/s21_map.h)
 
 

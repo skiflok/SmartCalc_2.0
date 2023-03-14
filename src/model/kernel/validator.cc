@@ -4,12 +4,12 @@
 #include <string>
 //#include  <cstring>
 
-#include "validation.h"
-#define success  false;
-#define failure  true;
+#include "validator.h"
+#define success  true;
+#define failure  false;
 
 
-bool s21::Validation::CheckNumber(size_t &index) const {
+bool s21::Validator::CheckNumber(size_t &index) const {
     bool err = success;
     int count_dot{};
     for (auto i = index; i < expression_.size(); ++i) {
@@ -25,7 +25,7 @@ bool s21::Validation::CheckNumber(size_t &index) const {
     return err;
 }
 
-bool s21::Validation::IsValid() const {
+bool s21::Validator::IsValid() const {
     bool error = success;
     int brck_open_count{}, brck_close_count{};
     char check[] = "+-*/^m";
