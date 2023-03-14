@@ -20,8 +20,15 @@ protected:
     Controller controller;
 };
 
+TEST_F(Calculator_test, Controller_calculation_1) {
+  std::string expression = "2+3*2-5/2^4";
+  double res{};
 
+  res = controller.Calculation(expression);
 
+  cout << res << endl;
+
+}
 
 TEST_F(Calculator_test, simple_expression_to_rpn) {
     std::string expression = "2+3*2-5/2^4";
