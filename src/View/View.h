@@ -1,0 +1,6 @@
+#ifndef GOOGLE_TESTS_SRC_VIEW_VIEW_H_
+#define GOOGLE_TESTS_SRC_VIEW_VIEW_H_
+
+class View {};
+
+#endif  // GOOGLE_TESTS_SRC_VIEW_VIEW_H_

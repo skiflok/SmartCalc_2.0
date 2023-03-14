@@ -1,6 +1,4 @@
-//
-// Created by Qyburn Bongo on 3/11/23.
-//
+
 #include <string>
 //#include  <cstring>
 

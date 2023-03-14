@@ -1,6 +1,3 @@
-//
-// Created by Qyburn Bongo on 3/11/23.
-//
 
 #ifndef GOOGLE_TESTS_VALIDATION_H
 #define GOOGLE_TESTS_VALIDATION_H

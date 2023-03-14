@@ -1,7 +1,3 @@
-//
-// Created by Qyburn Bongo on 3/7/23.
-//
-
 #ifndef CPP3_SMARTCALC_V2_0_0_CALCULATOR_H
 #define CPP3_SMARTCALC_V2_0_0_CALCULATOR_H
 #include <iostream>
