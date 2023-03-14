@@ -4,8 +4,8 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
-#include "../model/calculator.cc"
-#include "../model/validation.cc"
+#include "../model/kernel/calculator.cc"
+#include "../model/kernel/validation.cc"
 
 using std::cout;
 using std::endl;
