@@ -28,10 +28,13 @@ class Model {
    */
   double Calculation(std::string &expression) {
     Validator validator(expression);
+    validator.IsValid();
     if (!validator.IsValid()) {
       throw std::invalid_argument("Invalid input");
     }
     Parser parser(expression);
+//    parser.ExpressionToRpn();
+//    std::queue<std::string> rpn_expr = parser.GetRpn();
     Calculator calculator(parser.GetRpn());
     double result{};
     try {
