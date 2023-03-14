@@ -13,9 +13,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
-#add_executable(Google_Tests_run tests_map.cc ../src/sorted_container/associative_container/s21_map.h)
-
+enable_testing()
 
 set(HEADER_FILES
         ../model/kernel/parser.h
@@ -27,13 +25,14 @@ set(SOURCE_FILES
         ../model/kernel/calculator.cc
         )
 
-#add_executable(s21_matrix_cpp
-#        s21_matrix_oop.cpp
-#        s21_matrix_oop.h)
+add_library(smart_calc STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
-add_library(parser STATIC ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(unit_tests tests.cc)
 
+target_link_libraries(unit_tests
+        smart_calc
+        gtest
+        gtest_main
+        )
 
-add_executable(Google_Tests_run tests.cc)
-
-target_link_libraries(Google_Tests_run gtest gtest_main parser)
+add_test(test_all unit_tests)
