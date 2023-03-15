@@ -13,9 +13,11 @@ std::pair<std::vector<double>, std::vector<double>>
 s21::CalculatorPlot::PlotCalculation() {
   std::vector<double> X{}, Y{};
   for (auto xValue = data_plot_.x_begin_; xValue < data_plot_.x_end_;
-       xValue += data_plot_.step_size_) {
+       xValue += step_size_) {
     double yValue = 0.0;
-    int error = 0;
+    if (fabs(xValue) < EPS) {  // нужно при нуле
+      xValue = 0.0;
+    }
     for (auto token : rpn_expression_list_) {
       GetDigitFromRpn(token, xValue);
       if (token == "+" || token == "-" || token == "*" || token == "/" ||
@@ -30,7 +32,7 @@ s21::CalculatorPlot::PlotCalculation() {
     X.push_back(xValue);
     Y.push_back(yValue);
   }
-  return std::pair<std::vector<double>, std::vector<double>>(X, Y);
+  return {X, Y};
 }
 
 void s21::CalculatorPlot::GetDigitFromRpn(const std::string &token,
@@ -40,4 +42,10 @@ void s21::CalculatorPlot::GetDigitFromRpn(const std::string &token,
   } else if (token == "x") {
     numbers_.push(xValue);
   }
+}
+
+void s21::CalculatorPlot::CalculateStepSize() {
+  double x_begin = abs(data_plot_.x_begin_);
+  double x_end = abs(data_plot_.x_end_);
+  step_size_ = static_cast<double>((x_begin + x_end) * 0.01);
 }

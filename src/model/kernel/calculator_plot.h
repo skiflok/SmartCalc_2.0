@@ -10,6 +10,8 @@
 #include "../../view/data/data_plot.h"
 #include "calculator.h"
 
+#define EPS 1e-7
+
 namespace s21 {
 
 class CalculatorPlot : public Calculator {
@@ -17,11 +19,12 @@ class CalculatorPlot : public Calculator {
   CalculatorPlot(const DataPlot &data_plot,
                  std::queue<std::string> rpn_expression)
       : data_plot_(data_plot) {
-    //    this->rpn_expression_ = rpn_expression;
+    // потом лучше в родителе поменять на лист
     for (auto i = 0; !rpn_expression.empty(); ++i) {
       rpn_expression_list_.push_back(rpn_expression.front());
       rpn_expression.pop();
     }
+    CalculateStepSize();
   }
 
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation();
@@ -30,8 +33,10 @@ class CalculatorPlot : public Calculator {
   DataPlot data_plot_;
   //  std::queue<std::string> rpn_expression_;
   std::list<std::string> rpn_expression_list_{};
+  double step_size_{};
 
   void GetDigitFromRpn(const std::string &token, const double &xValue);
+  void CalculateStepSize();
 };
 
 }  // namespace s21
