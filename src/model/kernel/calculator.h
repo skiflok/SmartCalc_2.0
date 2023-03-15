@@ -15,14 +15,14 @@ namespace s21 {
 class Calculator {
  public:
   Calculator() = default;
-  explicit Calculator(const std::queue<std::string> &rpn_expression)
-      : rpn_expression_(rpn_expression) {}
+//  explicit Calculator(const std::queue<std::string> &rpn_expression)
+//      : rpn_expression_(rpn_expression) {}
 
   ~Calculator() = default;
   /***
    * @brif main method for calculation expression
    */
-  double Calculate();
+  double Calculate(std::queue<std::string> &rpn_expression);
 
  protected:
   /***
@@ -35,12 +35,12 @@ class Calculator {
    * @brif calculates expression (binary operator)
    * @param token is operator
    */
-  void BinaryFunc(std::string &token);
+  double BinaryFunc(std::string &token, std::stack<double>& numbers);
   /***
    * @brif calculates expression (unary operator)
    * @param token is operator
    */
-  void UnaryFunc(std::string &token);
+  double UnaryFunc(std::string &token, std::stack<double>& numbers);
   std::queue<std::string> rpn_expression_;
   std::stack<double> numbers_;
 

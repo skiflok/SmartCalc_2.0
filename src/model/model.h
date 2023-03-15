@@ -27,15 +27,15 @@ class Model {
    * @return результат расчета
    */
   double Calculation(std::string &expression) {
-    Validator validator(expression);
-    if (validator.IsNotValid()) {
+    if (validator_.IsNotValid(expression)) {
       throw std::invalid_argument("Invalid input");
     }
     Parser parser(expression);
-    Calculator calculator(parser.GetRpn());
+    std::queue<std::string> queueRPNExpression = parser.GetRpn();
+
     double result{};
     try {
-      result = calculator.Calculate();
+      result = calculator_.Calculate(queueRPNExpression);
     } catch (...) {
       throw std::invalid_argument("Calculation error");
     }
@@ -51,10 +51,10 @@ class Model {
    */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
       DataPlot data_plot) {
-    Validator validator(data_plot.expression_);
-    if (!validator.IsNotValid()) {
+    if (validator_.IsNotValid(data_plot.expression_)) {
       throw std::invalid_argument("Invalid input");
     }
+
     Parser parser(data_plot.expression_);
 
     CalculatorPlot calculator_plot(data_plot, parser.GetRpn());
@@ -75,9 +75,9 @@ class Model {
   DataDeposit DebitCalculation(DataDeposit &data_deposit);
 
  private:
-  //  Calculator calculator_;
+  Validator validator_;
+  Calculator calculator_;
   //  Parser parser_;
-  //  Validator validator_;
 };
 
 }  // namespace s21

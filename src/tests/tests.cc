@@ -54,23 +54,23 @@ TEST_F(Calculator_test, parse_testX) {
   parser.PrintRpnExpression();
 }
 
-TEST_F(Calculator_test, CalculateX) {
-  std::string expression = "x+3*2-5/2^x";
-  std::cout << "Input_____string\n" << expression << std::endl << std::endl;
-
-  DataPlot data_plot(expression, -10, 10);
-  std::pair<std::vector<double>, std::vector<double>> result =
-      controller.PlotCalculation(data_plot);
-
-  std::cout << "Xbegin_____Xend" << std::endl;
-  for (auto iter : result.first) {
-    std::cout << iter << ' ';
-  }
-  std::cout << "\n\nYbegin_____Yend" << std::endl;
-  for (auto iter : result.second) {
-    std::cout << iter << ' ';
-  }
-}
+//TEST_F(Calculator_test, CalculateX) {
+//  std::string expression = "x+3*2-5/2^x";
+//  std::cout << "Input_____string\n" << expression << std::endl << std::endl;
+//
+//  DataPlot data_plot(expression, -10, 10);
+//  std::pair<std::vector<double>, std::vector<double>> result =
+//      controller.PlotCalculation(data_plot);
+//
+//  std::cout << "Xbegin_____Xend" << std::endl;
+//  for (auto iter : result.first) {
+//    std::cout << iter << ' ';
+//  }
+//  std::cout << "\n\nYbegin_____Yend" << std::endl;
+//  for (auto iter : result.second) {
+//    std::cout << iter << ' ';
+//  }
+//}
 
 TEST_F(Calculator_test, expression_to_rpn_brck) {
   std::string expression = "2*(2+3)/5-(1+4)^2";

@@ -6,87 +6,98 @@
 #include <cmath>
 #include <string>
 
-double s21::Calculator::Calculate() {
-  double result = 0.0;
-  int error = 0;
-  while (!rpn_expression_.empty()) {
-    std::string token = rpn_expression_.front();
-    rpn_expression_.pop();
-    GetDigitFromRpn(token);
+double s21::Calculator::Calculate(std::queue<std::string> &rpn_expression) {
+  std::stack<double> numbers{};
+
+  double result{};
+
+  while (!rpn_expression.empty()) {
+    std::string token = rpn_expression.front();
+    rpn_expression.pop();
+
+    if (isdigit(token.front())) {
+      numbers.push(std::stod(token));
+    }
+
     if (token == "+" || token == "-" || token == "*" || token == "/" ||
         token == "^" || token == "m") {
-      BinaryFunc(token);
+      numbers.push(BinaryFunc(token, numbers));
     } else if (isalpha(token.front())) {
-      UnaryFunc(token);
+      numbers.push(UnaryFunc(token, numbers));
     }
   }
-  result = numbers_.top();
-  if (isfinite(result)) error = 1;  // TODO something throw Exception
+  result = numbers.top();
+  if (!isfinite(result)) throw std::invalid_argument("value is infinite");
   return result;
 }
 
-void s21::Calculator::GetDigitFromRpn(const std::string &token) {
-  if (isdigit(token.front())) {
-    numbers_.push(std::stod(token));
-  }
-}
-
-void s21::Calculator::BinaryFunc(std::string &token) {
+double s21::Calculator::BinaryFunc(std::string &token, std::stack<double>& numbers) {
   //    double num1 = (op == U_MINUS || op == U_PLUS) ? 0 : pop(stack_n);
   double num1{}, num2{};
-  num2 = numbers_.top();
-  numbers_.pop();
-  num1 = numbers_.top();
-  numbers_.pop();
-  if (token == "+") {
-    numbers_.push(num1 + num2);
+  num2 = numbers.top();
+  numbers.pop();
+  num1 = numbers.top();
+  numbers.pop();
+  double res{};
+
+  switch (token.front()) {
+    case '+':
+      res = num1 + num2;
+      break;
+    case '-':
+      res = num1 - num2;
+      break;
+    case '*':
+      res = num1 * num2;
+      break;
+    case '/':
+      res = num1 / num2;
+      break;
+    case '^':
+      res = pow(num1, num2);
+      break;
+    case 'm':
+      res = fmod(num1, num2);
+      break;
   }
-  if (token == "-") {
-    numbers_.push(num1 - num2);
-  }
-  if (token == "*") {
-    numbers_.push(num1 * num2);
-  }
-  if (token == "/") {
-    numbers_.push(num1 / num2);
-  }
-  if (token == "^") {
-    numbers_.push(pow(num1, num2));
-  }
-  if (token == "m") {
-    numbers_.push(fmod(num1, num2));
-  }
+
+  return res;
 }
 
-void s21::Calculator::UnaryFunc(std::string &token) {
+double s21::Calculator::UnaryFunc(std::string &token, std::stack<double>& numbers) {
   double num{};
-  num = numbers_.top();
-  numbers_.pop();
-  if (token == "s") {
-    numbers_.push(sin(num));
+  num = numbers.top();
+  numbers.pop();
+  double res{};
+
+  switch (token.at(0)) {
+    case 's':
+      res = sin(num);
+      break;
+    case 'c':
+      res = cos(num);
+      break;
+    case 't':
+      res = tan(num);
+      break;
+    case 'l':
+      res = log(num);
+      break;
+    case 'L':
+      res = log10(num);
+      break;
+    case 'S':
+      res = asin(num);
+      break;
+    case 'C':
+      res = acos(num);
+      break;
+    case 'T':
+      res = atan(num);
+      break;
+    case 'q':
+      res = sqrt(num);
+      break;
   }
-  if (token == "c") {
-    numbers_.push(cos(num));
-  }
-  if (token == "t") {
-    numbers_.push(tan(num));
-  }
-  if (token == "l") {
-    numbers_.push(log(num));
-  }
-  if (token == "L") {
-    numbers_.push(log10(num));
-  }
-  if (token == "S") {
-    numbers_.push(asin(num));
-  }
-  if (token == "C") {
-    numbers_.push(acos(num));
-  }
-  if (token == "T") {
-    numbers_.push(atan(num));
-  }
-  if (token == "q") {
-    numbers_.push(sqrt(num));
-  }
+  return res;
 }

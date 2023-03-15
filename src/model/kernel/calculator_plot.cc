@@ -14,7 +14,10 @@ s21::CalculatorPlot::PlotCalculation() {
   std::vector<double> X{}, Y{};
   for (auto xValue = data_plot_.x_begin_; xValue < data_plot_.x_end_;
        xValue += step_size_) {
+
+
     double yValue = 0.0;
+    std::stack<double> numbers{};
     if (fabs(xValue) < EPS) {  // нужно при нуле
       xValue = 0.0;
     }
@@ -22,9 +25,9 @@ s21::CalculatorPlot::PlotCalculation() {
       GetDigitFromRpn(token, xValue);
       if (token == "+" || token == "-" || token == "*" || token == "/" ||
           token == "^" || token == "m") {
-        BinaryFunc(token);
+        BinaryFunc(token, numbers);
       } else if (isalpha(token.front()) && token != "x") {
-        UnaryFunc(token);
+        UnaryFunc(token, numbers);
       }
     }
     yValue = numbers_.top();
