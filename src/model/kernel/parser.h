@@ -14,29 +14,37 @@ namespace s21 {
 
 class Parser {
  public:
-  explicit Parser(const std::string &expression) : expression_(expression) {}
+  //  explicit Parser(const std::string &expression) : expression_(expression)
+  //  {}
 
-  std::queue<std::string> GetRpn() {
-    ExpressionToRpn();
-    return rpn_expression_;
+  std::queue<std::string> GetRpn(const std::string &expression) {
+    return ExpressionToRpn(expression);
   }
 
-  void ExpressionToRpn();
-  void PrintExpression() const { std::cout << expression_ << std::endl; }
-  void PrintRpnExpression();
+  std::queue<std::string> ExpressionToRpn(const std::string &expression);
+  void PrintExpression(std::string &expression) const {
+    std::cout << expression << std::endl;
+  }
+  void PrintRpnExpression(std::queue<std::string> &rpn_expression);
 
  private:
-  std::string expression_;
-  std::stack<char> operators_;
-  std::queue<std::string> rpn_expression_;
-  double ParseOfDigitFromExpression(size_t &index);
+  //  std::string expression_;
+  //  std::stack<char> operators_;
+  //  std::queue<std::string> rpn_expression_;
+  double ParseOfDigitFromExpression(size_t &index,
+                                    const std::string &expression);
   int GetPrecedence(char c) const;
-  char CheckFuncIs(size_t &index);
-  void PopFromStack(char c);
-  void PopFromStackEnd();
-  void PushRpnExpression();
-  void ConditionsByPrecedence(char c);
-  void UnaryMinusPlus(char c, size_t index);
+  char CheckFuncIs(size_t &index, const std::string &expression);
+  void PopFromStack(char c, std::stack<char> &operators,
+                    std::queue<std::string> &rpn_expression);
+  void PopFromStackEnd(std::stack<char> &operators,
+                       std::queue<std::string> &rpn_expression);
+  void PushRpnExpression(std::stack<char> &operators,
+                         std::queue<std::string> &rpn_expression);
+  void ConditionsByPrecedence(char c, std::stack<char> &operators,
+                              std::queue<std::string> &rpn_expression);
+  void UnaryMinusPlus(char c, size_t index, const std::string &expression,
+                      std::queue<std::string> &rpn_expression);
 };
 
 }  // namespace s21

@@ -30,12 +30,11 @@ class Model {
     if (validator_.IsNotValid(expression)) {
       throw std::invalid_argument("Invalid input");
     }
-    Parser parser(expression);
-    std::queue<std::string> queueRPNExpression = parser.GetRpn();
+    std::queue<std::string> queueRpn = parser_.GetRpn(expression);
 
     double result{};
     try {
-      result = calculator_.Calculate(queueRPNExpression);
+      result = calculator_.Calculate(queueRpn);
     } catch (...) {
       throw std::invalid_argument("Calculation error");
     }
@@ -50,19 +49,18 @@ class Model {
    * @return
    */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
-      DataPlot data_plot) {
-    if (validator_.IsNotValid(data_plot.expression_)) {
-      throw std::invalid_argument("Invalid input");
-    }
+      const DataPlot &data_plot) {
+//    if (validator_.IsNotValid(data_plot.expression_)) {
+//      throw std::invalid_argument("Invalid input");
+//    }
 
-    Parser parser(data_plot.expression_);
-
-    CalculatorPlot calculator_plot(data_plot, parser.GetRpn());
+    std::queue<std::string> rpn_expression = parser_.GetRpn(data_plot.expression_);
+    //        (data_plot,parser_.GetRpn(data_plot.expression_));
 
     std::pair<std::vector<double>, std::vector<double>> res;
 
     try {
-      res = calculator_plot.PlotCalculation();
+      res = calculator_plot_.PlotCalculation(data_plot, rpn_expression);
     } catch (...) {
       throw;
     }
@@ -76,8 +74,9 @@ class Model {
 
  private:
   Validator validator_;
+  Parser parser_;
   Calculator calculator_;
-  //  Parser parser_;
+  CalculatorPlot calculator_plot_;
 };
 
 }  // namespace s21

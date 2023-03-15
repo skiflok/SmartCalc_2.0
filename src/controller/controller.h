@@ -47,7 +47,7 @@ class Controller {
    * @return пару с 2 векторами координа х, у для построения графика
    */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
-      DataPlot data_plot) {
+      const DataPlot &data_plot) {
     return model_.PlotCalculation(data_plot);
   }
 

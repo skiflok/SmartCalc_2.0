@@ -4,41 +4,52 @@
 
 #include "parser.h"
 
-void s21::Parser::ExpressionToRpn() {
-  for (size_t i = 0; i < expression_.size(); ++i) {
-    char c = expression_[i];
+std::queue<std::string> s21::Parser::ExpressionToRpn(
+    const std::string &expression) {
+  std::queue<std::string> rpn_expression;
+  std::stack<char> operators;
+
+  for (size_t i = 0; i < expression.size(); ++i) {
+    char c = expression[i];
     // парсер без x
-    //    if (c != ' ' && isdigit(c)) {  // TODO Is it necessary to check spaces?
+    //    if (c != ' ' && isdigit(c)) {  // TODO Is it necessary to check
+    //    spaces?
     //      double d = ParseOfDigitFromExpression(i);
     //      rpn_expression_.push(std::to_string(d));
     //      --i;
-
     if (c != ' ' && (isdigit(c) || c == 'X' || c == 'x')) {
       std::string d{};
       if (c == 'X' || c == 'x') {
         d = "x";
       } else {
-        d = std::to_string(ParseOfDigitFromExpression(i));
+        d = std::to_string(ParseOfDigitFromExpression(i, expression));
         --i;
       }
-      rpn_expression_.push(d);
+      rpn_expression.push(d);
+
     } else if (isalpha(c) && c != ' ' && c != 'm') {
-      c = CheckFuncIs(i);
-      operators_.push(c);
+      c = CheckFuncIs(i, expression);
+
+      operators.push(c);
+
     } else if (c != ' ' && (c == '+' || c == '-' || c == '*' || c == '/' ||
                             c == '(' || c == ')' || c == '^' || c == 'm')) {
       if (c == 'm') i += 2;
-      UnaryMinusPlus(c, i);
-      ConditionsByPrecedence(c);
+      UnaryMinusPlus(c, i, expression, rpn_expression);
+
+      ConditionsByPrecedence(c, operators, rpn_expression);
     }
   }
-  PopFromStackEnd();
+  PopFromStackEnd(operators, rpn_expression);
+
+  return rpn_expression;
 }
 
-double s21::Parser::ParseOfDigitFromExpression(size_t &index) {
+double s21::Parser::ParseOfDigitFromExpression(size_t &index,
+                                               const std::string &expression) {
   std::size_t pos = index;
   double digit{};
-  digit = std::stod(expression_.substr(pos), &pos);
+  digit = std::stod(expression.substr(pos), &pos);
   index += pos;
   return digit;
 }
@@ -60,96 +71,103 @@ int s21::Parser::GetPrecedence(char c) const {
   return precedence;
 }
 
-char s21::Parser::CheckFuncIs(size_t &index) {
+char s21::Parser::CheckFuncIs(size_t &index, const std::string &expression) {
   char symbol_func{};
   size_t next_symbol = index + 1;
-  if (expression_[index] == 's' && expression_[next_symbol] == 'i') {
+  if (expression[index] == 's' && expression[next_symbol] == 'i') {
     index = index + 2;
     symbol_func = 's';
   }
-  if (expression_[index] == 'c') {
+  if (expression[index] == 'c') {
     index = index + 2;
     symbol_func = 'c';
   }
-  if (expression_[index] == 't') {
+  if (expression[index] == 't') {
     index = index + 2;
     symbol_func = 't';
   }
-  if (expression_[index] == 'l' && expression_[next_symbol] == 'n') {
+  if (expression[index] == 'l' && expression[next_symbol] == 'n') {
     index = index + 1;
     symbol_func = 'l';
   }
-  if (expression_[index] == 'l' && expression_[next_symbol] == 'o') {
+  if (expression[index] == 'l' && expression[next_symbol] == 'o') {
     index = index + 2;
     symbol_func = 'L';
   }
-  if (expression_[index] == 'a' && expression_[next_symbol] == 's') {
+  if (expression[index] == 'a' && expression[next_symbol] == 's') {
     index = index + 3;
     symbol_func = 'S';
   }
-  if (expression_[index] == 'a' && expression_[next_symbol] == 'c') {
+  if (expression[index] == 'a' && expression[next_symbol] == 'c') {
     index = index + 3;
     symbol_func = 'C';
   }
-  if (expression_[index] == 'a' && expression_[next_symbol] == 't') {
+  if (expression[index] == 'a' && expression[next_symbol] == 't') {
     index = index + 3;
     symbol_func = 'T';
   }
-  if (expression_[index] == 's' && expression_[next_symbol] == 'q') {
+  if (expression[index] == 's' && expression[next_symbol] == 'q') {
     index = index + 3;
     symbol_func = 'q';
   }
   return symbol_func;
 }
 
-void s21::Parser::PopFromStack(char c) {
-  while (!operators_.empty()) {
-    if (operators_.top() == '(') {
+void s21::Parser::PopFromStack(char c, std::stack<char> &operators,
+                               std::queue<std::string> &rpn_expression) {
+  while (!operators.empty()) {
+    if (operators.top() == '(') {
       break;
     }
-    if (GetPrecedence(operators_.top()) < GetPrecedence(c)) {
+    if (GetPrecedence(operators.top()) < GetPrecedence(c)) {
       break;
     }
-    PushRpnExpression();
+    PushRpnExpression(operators, rpn_expression);
   }
 }
 
-void s21::Parser::PopFromStackEnd() {
-  while (!operators_.empty()) {
-    PushRpnExpression();
+void s21::Parser::PopFromStackEnd(std::stack<char> &operators,
+                                  std::queue<std::string> &rpn_expression) {
+  while (!operators.empty()) {
+    PushRpnExpression(operators, rpn_expression);
   }
 }
 
-void s21::Parser::PushRpnExpression() {
-  std::string op = {operators_.top()};
-  rpn_expression_.push(op);
-  operators_.pop();
+void s21::Parser::PushRpnExpression(std::stack<char> &operators,
+                                    std::queue<std::string> &rpn_expression) {
+  std::string op = {operators.top()};
+  rpn_expression.push(op);
+  operators.pop();
 }
 
-void s21::Parser::ConditionsByPrecedence(char c) {
-  if (operators_.empty() || c == '(' ||
-      GetPrecedence(c) > GetPrecedence(operators_.top()) ||
-      (c == '^' && operators_.top() == '^'))
-    operators_.push(c);
+void s21::Parser::ConditionsByPrecedence(
+    char c, std::stack<char> &operators,
+    std::queue<std::string> &rpn_expression) {
+  if (operators.empty() || c == '(' ||
+      GetPrecedence(c) > GetPrecedence(operators.top()) ||
+      (c == '^' && operators.top() == '^'))
+    operators.push(c);
   else if (c == ')') {
-    while (operators_.top() != '(') {
-      PushRpnExpression();
+    while (operators.top() != '(') {
+      PushRpnExpression(operators, rpn_expression);
     }
-    operators_.pop();
+    operators.pop();
   } else {
-    PopFromStack(c);
-    operators_.push(c);
+    PopFromStack(c, operators, rpn_expression);
+    operators.push(c);
   }
 }
 
-void s21::Parser::UnaryMinusPlus(char c, size_t index) {
-  if ((c == '-' && (index == 0 || expression_[index - 1] == '(')) ||
-      (c == '+' && (index == 0 || expression_[index - 1] == '(')))
-    rpn_expression_.push("0.0");
+void s21::Parser::UnaryMinusPlus(char c, size_t index,
+                                 const std::string &expression,
+                                 std::queue<std::string> &rpn_expression) {
+  if ((c == '-' && (index == 0 || expression[index - 1] == '(')) ||
+      (c == '+' && (index == 0 || expression[index - 1] == '(')))
+    rpn_expression.push("0.0");
 }
 
-void s21::Parser::PrintRpnExpression() {
-  std::queue<std::string> rpn_expression2 = rpn_expression_;
+void s21::Parser::PrintRpnExpression(std::queue<std::string> &rpn_expression) {
+  std::queue<std::string> rpn_expression2 = rpn_expression;
   while (!rpn_expression2.empty()) {
     std::cout << rpn_expression2.front();
     rpn_expression2.pop();

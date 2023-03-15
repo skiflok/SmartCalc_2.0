@@ -41,8 +41,8 @@ class Calculator {
    * @param token is operator
    */
   double UnaryFunc(std::string &token, std::stack<double>& numbers);
-  std::queue<std::string> rpn_expression_;
-  std::stack<double> numbers_;
+//  std::queue<std::string> rpn_expression_;
+//  std::stack<double> numbers_;
 
  private:
 };

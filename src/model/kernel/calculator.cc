@@ -31,7 +31,8 @@ double s21::Calculator::Calculate(std::queue<std::string> &rpn_expression) {
   return result;
 }
 
-double s21::Calculator::BinaryFunc(std::string &token, std::stack<double>& numbers) {
+double s21::Calculator::BinaryFunc(std::string &token,
+                                   std::stack<double> &numbers) {
   //    double num1 = (op == U_MINUS || op == U_PLUS) ? 0 : pop(stack_n);
   double num1{}, num2{};
   num2 = numbers.top();
@@ -64,7 +65,8 @@ double s21::Calculator::BinaryFunc(std::string &token, std::stack<double>& numbe
   return res;
 }
 
-double s21::Calculator::UnaryFunc(std::string &token, std::stack<double>& numbers) {
+double s21::Calculator::UnaryFunc(std::string &token,
+                                  std::stack<double> &numbers) {
   double num{};
   num = numbers.top();
   numbers.pop();
