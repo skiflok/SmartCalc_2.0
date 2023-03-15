@@ -11,6 +11,7 @@
 #include "../view/data/data_credit.h"
 #include "../view/data/data_deposit.h"
 #include "../view/data/data_plot.h"
+#include <QString>
 
 namespace s21 {
 
@@ -25,8 +26,10 @@ class Controller {
     // TODO try catch???
     double result{};
 
+    std::string expressionToString = expression.toStdString();
+
     try {
-      result = model_.Calculation(expression);
+      result = model_.Calculation(expressionToString);
     } catch (...) {
       throw std::invalid_argument("Invalid input");
     }
