@@ -6,19 +6,14 @@
 #include <cmath>
 #include <string>
 
-double s21::Calculator::Calculate(std::queue<std::string> &rpn_expression) {
+double s21::Calculator::Calculate(std::list<std::string> &rpn_expression) {
   std::stack<double> numbers{};
-
   double result{};
 
-  while (!rpn_expression.empty()) {
-    std::string token = rpn_expression.front();
-    rpn_expression.pop();
-
+  for (auto &token : rpn_expression) {
     if (isdigit(token.front())) {
       numbers.push(std::stod(token));
     }
-
     if (token == "+" || token == "-" || token == "*" || token == "/" ||
         token == "^" || token == "m") {
       numbers.push(BinaryFunc(token, numbers));
@@ -26,6 +21,7 @@ double s21::Calculator::Calculate(std::queue<std::string> &rpn_expression) {
       numbers.push(UnaryFunc(token, numbers));
     }
   }
+
   result = numbers.top();
   if (!isfinite(result)) throw std::invalid_argument("value is infinite");
   return result;
@@ -72,7 +68,7 @@ double s21::Calculator::UnaryFunc(std::string &token,
   numbers.pop();
   double res{};
 
-  switch (token.at(0)) {
+  switch (token.front()) {
     case 's':
       res = sin(num);
       break;

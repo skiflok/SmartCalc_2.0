@@ -5,6 +5,7 @@
 #ifndef CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_
 #define CPP3_SMARTCALC_V2_0_0_SRC_MODEL_MODEL_H_
 
+#include <list>
 #include <queue>
 #include <string>
 #include <vector>
@@ -30,7 +31,8 @@ class Model {
     if (validator_.IsNotValid(expression)) {
       throw std::invalid_argument("Invalid input");
     }
-    std::queue<std::string> queueRpn = parser_.GetRpn(expression);
+
+    std::list<std::string> queueRpn = parser_.GetRpn(expression);
 
     double result{};
     try {
@@ -50,12 +52,12 @@ class Model {
    */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
       const DataPlot &data_plot) {
-//    if (validator_.IsNotValid(data_plot.expression_)) {
-//      throw std::invalid_argument("Invalid input");
-//    }
+    if (validator_.IsNotValid(data_plot.expression_)) {
+      throw std::invalid_argument("Invalid input");
+    }
 
-    std::queue<std::string> rpn_expression = parser_.GetRpn(data_plot.expression_);
-    //        (data_plot,parser_.GetRpn(data_plot.expression_));
+    std::list<std::string> rpn_expression =
+        parser_.GetRpn(data_plot.expression_);
 
     std::pair<std::vector<double>, std::vector<double>> res;
 

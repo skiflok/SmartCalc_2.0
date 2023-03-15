@@ -50,16 +50,19 @@ bool s21::Validator::IsNotValid(const std::string &expression) const {
     if (current == ')') brck_close_count++;
     if (brck_open_count < brck_close_count) error = failure;
     if (i == last && brck_open_count != brck_close_count) error = failure;
+
     if ((prev == '(' && (current == '*' || current == '/' || current == '^' ||
                          current == 'm')) ||
         (first == '*' || first == '/' || first == '^' || first == 'm' ||
          first == '.') ||
-        (!isdigit(expression[last]) && expression[last] != ')')) {
+        (!isdigit(expression[last]) && expression[last] != ')' &&
+         expression[last] != 'X')) {
       error = failure;
     }
     if (current == '.' && (!isdigit(prev) || !isdigit(next))) error = failure;
     if (current == '(' && next == ')') error = failure;
-    if (prev == '(' && !isdigit(current) && next == ')') error = failure;
+    if (prev == '(' && !isdigit(current) && current != 'X' && next == ')')
+      error = failure;
     if ((current == '(' || isdigit(current)) && prev == ')') error = failure;
     if (i != last) {
       if ((current == ')') && (!strspn(&next, check) && next != ')'))
@@ -67,7 +70,12 @@ bool s21::Validator::IsNotValid(const std::string &expression) const {
       if ((isdigit(current)) &&
           (!strspn(&next, check) && next != ')' && !isdigit(next)))
         error = failure;
+      if (current == 'X' &&
+          (!strspn(&next, check) && next != ')' && next != 'X'))
+        error = failure;
     }
+    if (current == 'X' && (!strspn(&prev, check) && prev != '(' && prev != 'X'))
+      error = failure;
   }
   return error;
 }

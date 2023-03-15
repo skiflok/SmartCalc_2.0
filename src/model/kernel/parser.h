@@ -6,6 +6,7 @@
 #define CPP3_SMARTCALC_V2_0_0_SRC_MODEL_KERNEL_PARSER_H_
 
 #include <iostream>
+#include <list>
 #include <queue>
 #include <stack>
 #include <string>
@@ -17,15 +18,15 @@ class Parser {
   //  explicit Parser(const std::string &expression) : expression_(expression)
   //  {}
 
-  std::queue<std::string> GetRpn(const std::string &expression) {
+  std::list<std::string> GetRpn(const std::string &expression) {
     return ExpressionToRpn(expression);
   }
 
-  std::queue<std::string> ExpressionToRpn(const std::string &expression);
+  std::list<std::string> ExpressionToRpn(const std::string &expression);
   void PrintExpression(std::string &expression) const {
     std::cout << expression << std::endl;
   }
-  void PrintRpnExpression(std::queue<std::string> &rpn_expression);
+  void PrintRpnExpression(std::list<std::string> &rpn_expression);
 
  private:
   //  std::string expression_;
@@ -36,15 +37,15 @@ class Parser {
   int GetPrecedence(char c) const;
   char CheckFuncIs(size_t &index, const std::string &expression);
   void PopFromStack(char c, std::stack<char> &operators,
-                    std::queue<std::string> &rpn_expression);
+                    std::list<std::string> &rpn_expression);
   void PopFromStackEnd(std::stack<char> &operators,
-                       std::queue<std::string> &rpn_expression);
+                       std::list<std::string> &rpn_expression);
   void PushRpnExpression(std::stack<char> &operators,
-                         std::queue<std::string> &rpn_expression);
+                         std::list<std::string> &rpn_expression);
   void ConditionsByPrecedence(char c, std::stack<char> &operators,
-                              std::queue<std::string> &rpn_expression);
+                              std::list<std::string> &rpn_expression);
   void UnaryMinusPlus(char c, size_t index, const std::string &expression,
-                      std::queue<std::string> &rpn_expression);
+                      std::list<std::string> &rpn_expression);
 };
 
 }  // namespace s21

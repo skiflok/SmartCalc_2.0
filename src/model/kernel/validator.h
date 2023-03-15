@@ -11,15 +11,14 @@ namespace s21 {
 
 class Validator {
  public:
-//  explicit Validator(const std::string &expression) : expression_(expression) {}
-//  Validator() =
-//  ~Validator() = default;
+  //  explicit Validator(const std::string &expression) :
+  //  expression_(expression) {} Validator() = ~Validator() = default;
 
   bool IsNotValid(const std::string &expression) const;
 
  private:
   bool CheckNumber(size_t &index, const std::string &expression) const;
-//  std::string expression_;
+  //  std::string expression_;
 };
 }  // namespace s21
 

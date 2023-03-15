@@ -34,7 +34,7 @@ TEST_F(Calculator_test, Controller_calculation_1) {
 TEST_F(Calculator_test, parse_test) {
   std::string expression = "2+3*2-5/2^4";
 
-  std::queue<std::string> result = parser.ExpressionToRpn(expression);
+  std::list<std::string> result = parser.ExpressionToRpn(expression);
   parser.PrintExpression(expression);
   cout << "________________" << endl;
   cout << "232*+524^/-" << endl;
@@ -42,17 +42,24 @@ TEST_F(Calculator_test, parse_test) {
 }
 
 TEST_F(Calculator_test, parse_testX) {
-  std::string expression = "x+3*2-5/2^x";
+  std::string expression = "X+3*2-5/2^X";
 
-  std::queue<std::string> result = parser.ExpressionToRpn(expression);
+  std::list<std::string> result = parser.ExpressionToRpn(expression);
   parser.PrintExpression(expression);
   cout << "________________" << endl;
-  cout << "x32*+52x^/-" << endl;
+  cout << "X32*+52X^/-" << endl;
   parser.PrintRpnExpression(result);
 }
 
 TEST_F(Calculator_test, CalculateX) {
-  std::string expression = "x+3*2-5/2^x";
+  //      std::string expression = "(1.1X)+3*2-5/2^X";  // валидация
+  //  std::string expression = "(X)+3*1.1*X*2-5/2^1.1X";  // валидация
+  //  std::string expression = "(X)+3*1.1*X*2-5/2^X1.1";  // валидация
+  //  std::string expression = "(X)+3*1.1*1.1X*2-5/2^1.1*X";  // валидация
+  //  std::string expression = "(X)+3*1.1*X1.1*2-5/2^1.1*X";  //валидация
+  //  std::string expression = "(1.1X)+3*1.1*X*2-5/2^1.1*X";  // валидация
+  std::string expression = "(-X+1.1)+3*1.1*X*2-5/2^1.1*X";
+
   std::cout << "Input_____string\n" << expression << std::endl << std::endl;
 
   DataPlot data_plot(expression, -10, 10);
@@ -96,8 +103,8 @@ TEST_F(Calculator_test, Calculate) {
       "sqrt(4)+9.235+2^3^sin(cos(10))-564-sqrt(25)+28.6*35mod99^2^3";
 
   double calculated_result = controller.Calculation(expression);
-  //  double should_result = 2.518307993619524;
-  //  EXPECT_DOUBLE_EQ(calculated_result , should_result);
+  double should_result = 444.59309217773205;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, Calculate1) {
@@ -105,8 +112,8 @@ TEST_F(Calculator_test, Calculate1) {
       "5+(1+2)*4*(1)*cos(2*7.5-2)+sin(cos(2*5))-sqrt(2^log(5-1))+ln(55)";
 
   double calculated_result = controller.Calculation(expression);
-  //  double should_result = 2.518307993619524;
-  //  EXPECT_DOUBLE_EQ(calculated_result , should_result);
+  double should_result = 17.920647794675116;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, Calculate2) {
@@ -114,31 +121,31 @@ TEST_F(Calculator_test, Calculate2) {
       "-5+(-1+2)*4*cos(-2*7.5-2)+sin(cos(2*5))-sqrt(2^log(5-1))+ln(55)";
 
   double calculated_result = controller.Calculation(expression);
-  //  double should_result = 2.518307993619524;
-  //  EXPECT_DOUBLE_EQ(calculated_result , should_result);
+  double should_result = -4.069366934933627;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, Calculate3) {
   std::string expression = "3+(3+5)*2+3/(1-4)^3*2";
 
   double calculated_result = controller.Calculation(expression);
-  //  double should_result = 2.518307993619524;
-  //  EXPECT_DOUBLE_EQ(calculated_result , should_result);
+  double should_result = 18.77777777777778;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, Calculate4) {
   std::string expression = "-1+(-2+5)";
 
   double calculated_result = controller.Calculation(expression);
-  //  double should_result = 2.518307993619524;
-  //  EXPECT_DOUBLE_EQ(calculated_result , should_result);
+  double should_result = 2;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, ParseOfDigitFromExpression) {
   std::string expression = "25.58e-1+89.47";
-  double res = controller.Calculation(expression);
-
-  //  cout << res << endl;
+  double calculated_result = controller.Calculation(expression);
+  double should_result = 92.02799999999999;
+  EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, IsNotValid) {

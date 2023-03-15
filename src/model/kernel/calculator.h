@@ -7,6 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include <queue>
+#include <list>
 #include <stack>
 #include <string>
 
@@ -14,15 +15,10 @@ namespace s21 {
 
 class Calculator {
  public:
-  Calculator() = default;
-//  explicit Calculator(const std::queue<std::string> &rpn_expression)
-//      : rpn_expression_(rpn_expression) {}
-
-  ~Calculator() = default;
   /***
    * @brif main method for calculation expression
    */
-  double Calculate(std::queue<std::string> &rpn_expression);
+  double Calculate(std::list<std::string> &rpn_expression);
 
  protected:
   /***
@@ -35,14 +31,14 @@ class Calculator {
    * @brif calculates expression (binary operator)
    * @param token is operator
    */
-  double BinaryFunc(std::string &token, std::stack<double>& numbers);
+  double BinaryFunc(std::string &token, std::stack<double> &numbers);
   /***
    * @brif calculates expression (unary operator)
    * @param token is operator
    */
-  double UnaryFunc(std::string &token, std::stack<double>& numbers);
-//  std::queue<std::string> rpn_expression_;
-//  std::stack<double> numbers_;
+  double UnaryFunc(std::string &token, std::stack<double> &numbers);
+  //  std::queue<std::string> rpn_expression_;
+  //  std::stack<double> numbers_;
 
  private:
 };
