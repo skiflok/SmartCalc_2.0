@@ -24,7 +24,7 @@ class Calculator {
    */
   double Calculate();
 
- private:
+ protected:
   /***
    * @brif Converts the string to a number from a queue rpn and pushes it to the
    * stack numbers
@@ -41,9 +41,10 @@ class Calculator {
    * @param token is operator
    */
   void UnaryFunc(std::string &token);
-
-  std::stack<double> numbers_;
   std::queue<std::string> rpn_expression_;
+  std::stack<double> numbers_;
+
+ private:
 };
 }  // namespace s21
 

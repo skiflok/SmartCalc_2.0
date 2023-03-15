@@ -13,16 +13,20 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
+#enable_testing()
 
 set(HEADER_FILES
+        ../model/kernel/validator.h
         ../model/kernel/parser.h
+        ../model/kernel/calculator.h
+        ../model/kernel/calculator_plot.h
         )
 
 set(SOURCE_FILES
         ../model/kernel/validator.cc
         ../model/kernel/parser.cc
         ../model/kernel/calculator.cc
+        ../model/kernel/calculator_plot.cc
         )
 
 add_library(smart_calc STATIC ${SOURCE_FILES} ${HEADER_FILES})
@@ -35,4 +39,4 @@ target_link_libraries(unit_tests
         gtest_main
         )
 
-add_test(test_all unit_tests)
+#add_test(test_all unit_tests)

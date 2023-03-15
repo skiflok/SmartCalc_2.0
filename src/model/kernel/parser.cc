@@ -7,10 +7,21 @@
 void s21::Parser::ExpressionToRpn() {
   for (size_t i = 0; i < expression_.size(); ++i) {
     char c = expression_[i];
-    if (c != ' ' && isdigit(c)) {  // TODO Is it necessary to check spaces?
-      double d = ParseOfDigitFromExpression(i);
-      rpn_expression_.push(std::to_string(d));
-      --i;
+    // парсер без x
+    //    if (c != ' ' && isdigit(c)) {  // TODO Is it necessary to check spaces?
+    //      double d = ParseOfDigitFromExpression(i);
+    //      rpn_expression_.push(std::to_string(d));
+    //      --i;
+
+    if (c != ' ' && (isdigit(c) || c == 'X' || c == 'x')) {
+      std::string d{};
+      if (c == 'X' || c == 'x') {
+        d = "x";
+      } else {
+        d = std::to_string(ParseOfDigitFromExpression(i));
+        --i;
+      }
+      rpn_expression_.push(d);
     } else if (isalpha(c) && c != ' ' && c != 'm') {
       c = CheckFuncIs(i);
       operators_.push(c);

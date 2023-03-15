@@ -51,11 +51,11 @@ class Model {
    */
   std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
       DataPlot data_plot) {
-    Validator validator(data_plot.GetExpression());
+    Validator validator(data_plot.expression_);
     if (!validator.IsNotValid()) {
       throw std::invalid_argument("Invalid input");
     }
-    Parser parser(data_plot.GetExpression());
+    Parser parser(data_plot.expression_);
 
     CalculatorPlot calculator_plot(data_plot, parser.GetRpn());
 
