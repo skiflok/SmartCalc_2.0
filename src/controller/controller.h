@@ -12,6 +12,9 @@
 #include "../view/data/data_deposit.h"
 #include "../view/data/data_plot.h"
 #include <QString>
+#include <QVector>
+#include <QList>
+#include <vector>
 
 namespace s21 {
 
@@ -22,7 +25,7 @@ class Controller {
    * @param expression строка с математическим выражением в прямой форме
    * @return результат расчета
    */
-  double Calculation(std::string &expression) {
+  double Calculation(QString &expression) {
     // TODO try catch???
     double result{};
 
@@ -42,16 +45,23 @@ class Controller {
    * @param x значение, если выражение пришло в виде функции
    * @return результат расчета
    */
-  double Calculation(std::string &expression, double &x) { return 0; }
+//  double Calculation(std::string &expression, double &x) { return 0; }
 
   /**
    * Выполняет расчет для отрисовки графика
    * @param data_plot класс который содержит данные для рсчета
    * @return пару с 2 векторами координа х, у для построения графика
    */
-  std::pair<std::vector<double>, std::vector<double>> PlotCalculation(
+  std::pair<QVector<double>, QVector<double>> PlotCalculation(
       const DataPlot &data_plot) {
-    return model_.PlotCalculation(data_plot);
+    std::pair<std::vector<double>, std::vector<double>> temp = model_.PlotCalculation(data_plot);
+
+    std::pair<QVector<double>, QVector<double>> castQvector;
+
+    castQvector.first = QVector<double>(temp.first.begin(), temp.first.end());
+    castQvector.second = QVector<double>(temp.second.begin(), temp.second.end());
+
+    return castQvector;
   }
 
   /**
