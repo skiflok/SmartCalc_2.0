@@ -8,8 +8,8 @@
 //#include "../model/kernel/calculator.cc"
 //#include "../model/kernel/validator.cc"
 
-#include "../controller/controller.h"
 #include "../model/kernel/parser.h"
+#include "../model/model.h"
 
 using std::cout;
 using std::endl;
@@ -18,15 +18,15 @@ using namespace s21;
 class Calculator_test : public ::testing::Test {
  protected:
   void SetUp() override {}
-  Controller controller;
   Parser parser;
+  Model model;
 };
 
-TEST_F(Calculator_test, Controller_calculation_1) {
+TEST_F(Calculator_test, model_calculation_1) {
   std::string expression = "2+3*2-5/2^4";
   double res{};
 
-  res = controller.Calculation(expression);
+  res = model.Calculation(expression);
 
   cout << res << endl;
 }
@@ -65,7 +65,7 @@ TEST_F(Calculator_test, CalculateX) {
   DataPlot data_plot(expression, -10, 10);
 
   std::pair<std::vector<double>, std::vector<double>> result =
-      controller.PlotCalculation(data_plot);
+      model.PlotCalculation(data_plot);
 
   std::cout << "Xbegin_____Xend" << std::endl;
   for (auto iter : result.first) {
@@ -79,21 +79,21 @@ TEST_F(Calculator_test, CalculateX) {
 
 TEST_F(Calculator_test, expression_to_rpn_brck) {
   std::string expression = "2*(2+3)/5-(1+4)^2";
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = -23;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, expression_to_rpn_funck) {
   std::string expression = "2*sin(3)+sqrt(5)";
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 2.518307993619524;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, expression_to_rpn_double) {
   std::string expression = "2.58e+1*sin(3.45)+sqrt(5)";
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = -5.5953030503776873;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -102,7 +102,7 @@ TEST_F(Calculator_test, Calculate) {
   std::string expression =
       "sqrt(4)+9.235+2^3^sin(cos(10))-564-sqrt(25)+28.6*35mod99^2^3";
 
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 444.59309217773205;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -111,7 +111,7 @@ TEST_F(Calculator_test, Calculate1) {
   std::string expression =
       "5+(1+2)*4*(1)*cos(2*7.5-2)+sin(cos(2*5))-sqrt(2^log(5-1))+ln(55)";
 
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 17.920647794675116;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -120,7 +120,7 @@ TEST_F(Calculator_test, Calculate2) {
   std::string expression =
       "-5+(-1+2)*4*cos(-2*7.5-2)+sin(cos(2*5))-sqrt(2^log(5-1))+ln(55)";
 
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = -4.069366934933627;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -128,7 +128,7 @@ TEST_F(Calculator_test, Calculate2) {
 TEST_F(Calculator_test, Calculate3) {
   std::string expression = "3+(3+5)*2+3/(1-4)^3*2";
 
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 18.77777777777778;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -136,14 +136,14 @@ TEST_F(Calculator_test, Calculate3) {
 TEST_F(Calculator_test, Calculate4) {
   std::string expression = "-1+(-2+5)";
 
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 2;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
 
 TEST_F(Calculator_test, ParseOfDigitFromExpression) {
   std::string expression = "25.58e-1+89.47";
-  double calculated_result = controller.Calculation(expression);
+  double calculated_result = model.Calculation(expression);
   double should_result = 92.02799999999999;
   EXPECT_DOUBLE_EQ(calculated_result, should_result);
 }
@@ -160,7 +160,7 @@ TEST_F(Calculator_test, IsNotValid) {
   //    std::string expression = "";
   //    std::string expression = "0";
   //    std::string expression = " ";
-  //  double res = controller.Calculation(expression);
+  //  double res = model.Calculation(expression);
 
   //  cout << res << endl;
 }
