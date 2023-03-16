@@ -13,7 +13,6 @@
 #include "../view/data/data_plot.h"
 #include <QString>
 #include <QVector>
-#include <QList>
 #include <vector>
 
 namespace s21 {
@@ -26,17 +25,17 @@ class Controller {
    * @return результат расчета
    */
   double Calculation(QString &expression) {
-    // TODO try catch???
-    double result{};
+	// TODO try catch???
+	double result{};
 
-    std::string expressionToString = expression.toStdString();
+	std::string expressionToString = expression.toStdString();
 
-    try {
-      result = model_.Calculation(expressionToString);
-    } catch (...) {
-      throw std::invalid_argument("Invalid input");
-    }
-    return result;
+	try {
+	  result = model_.Calculation(expressionToString);
+	} catch (...) {
+	  throw std::invalid_argument("Invalid input");
+	}
+	return result;
   }
 
   /**
@@ -52,16 +51,20 @@ class Controller {
    * @param data_plot класс который содержит данные для рсчета
    * @return пару с 2 векторами координа х, у для построения графика
    */
-  std::pair<QVector<double>, QVector<double>> PlotCalculation(
-      const DataPlot &data_plot) {
-    std::pair<std::vector<double>, std::vector<double>> temp = model_.PlotCalculation(data_plot);
+  std::pair<QVector < double>, QVector<double>> PlotCalculation(
+  const DataPlot &data_plot
+  ) {
 
-    std::pair<QVector<double>, QVector<double>> castQvector;
+	std::pair<QVector < double>, QVector < double >> castQvector;
 
-    castQvector.first = QVector<double>(temp.first.begin(), temp.first.end());
-    castQvector.second = QVector<double>(temp.second.begin(), temp.second.end());
+	try {
+	  std::pair<std::vector<double>, std::vector<double>> temp = model_.PlotCalculation(data_plot);
+	  castQvector.first = QVector<double>(temp.first.begin(), temp.first.end());
+	  castQvector.second = QVector<double>(temp.second.begin(), temp.second.end());
+	} catch (...) {
+	}
 
-    return castQvector;
+	return castQvector;
   }
 
   /**
