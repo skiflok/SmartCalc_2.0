@@ -72,7 +72,9 @@ class Controller {
    * @param data_credit
    * @return
    */
-  DataCredit CreditCalculation(DataCredit &data_credit);
+  DataCredit& CreditCalculation(DataCredit &data_credit) {
+	return model_.CreditCalculation(data_credit);
+  }
 
   /**
    * Расчитывает проценты по депозиту

@@ -17,6 +17,7 @@
 #include "./kernel/calculator_plot.h"
 #include "./kernel/parser.h"
 #include "./kernel/validator.h"
+#include "./kernel/calculator_credit.h"
 
 namespace s21 {
 
@@ -70,7 +71,9 @@ class Model {
     return res;
   }
 
-  DataCredit CreditCalculation(DataCredit &data_credit);
+  DataCredit& CreditCalculation(DataCredit &data_credit) {
+	return calculator_credit_.CreditCalculation(data_credit);
+  }
 
   DataDeposit DebitCalculation(DataDeposit &data_deposit);
 
@@ -79,6 +82,7 @@ class Model {
   Parser parser_;
   Calculator calculator_;
   CalculatorPlot calculator_plot_;
+  CalculatorCredit calculator_credit_;
 };
 
 }  // namespace s21
