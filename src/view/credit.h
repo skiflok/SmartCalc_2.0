@@ -25,4 +25,5 @@ class credit : public QDialog
   s21::Controller controller_{};
 };
 
+
 #endif //GOOGLE_TESTS_SRC_VIEW_CREDIT_H_

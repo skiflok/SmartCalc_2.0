@@ -34,22 +34,11 @@ void credit::on_calculate_clicked() {
   double output_overpayment_loan = data_credit.output_overpayment_loan_;
   double output_final_payment = data_credit.output_final_payment_;
 
+  // ____SETTING_VALUES____
+  ui->lineEdit_total_sum->setText(QString::number(output_final_payment, 'g', 20));
+  ui->lineEdit_overpayment->setText(QString::number(output_overpayment_loan, 'g', 20));
 
-  if (input_type_of_credit == ANNUITY) {
-	ui->lineEdit_total_sum->setText(QString::number(output_final_payment, 'g', 20));
-	ui->lineEdit_overpayment->setText(QString::number(output_overpayment_loan, 'g', 20));
-
-	for(int i = 1; i <= input_term_in_months; i++) {
-	  ui->listWidget_pay->addItem(QString::number(i, 'g', 20) + " month: " + QString::number(output_monthly_payment.at(i-1), 'g', 20));
-	}
-
-  } else if (input_type_of_credit == DIFFERENTIATED) {
-	ui->lineEdit_total_sum->setText(QString::number(output_final_payment, 'g', 20));
-	ui->lineEdit_overpayment->setText(QString::number(output_overpayment_loan, 'g', 20));
-
-	for(int i = 1; i <= input_term_in_months; i++) {
-	  ui->listWidget_pay->addItem(QString::number(i, 'g', 20)  + " month: " + QString::number(output_monthly_payment.at(i - 1), 'g', 20));
-	}
+  for(int i = 1; i <= input_term_in_months; i++) {
+	ui->listWidget_pay->addItem(QString::number(i, 'g', 20) + " month: " + QString::number(output_monthly_payment.at(i - 1), 'g', 20));
   }
-
 }
