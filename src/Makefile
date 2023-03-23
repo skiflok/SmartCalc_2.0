@@ -1,92 +1,95 @@
-CC=gcc -std=c11
-CFLAGS=-Wall -Wextra -Werror
+CC = gcc -std=c++17 -g
+CFLAGS = -Wall -Werror -Wextra
+INCLUDES = -I includes
 GCOV_LIBS=--coverage
-BUILD_PATH=./
-SOURCES=s21_calc.c
-H=s21_calc.h
-LIBO=s21_calc.o
-LIBA=s21_calc.a
-EXE=test.out
-MKF = makefile.qt # создаю файл чтоб читался как makefile для install
+
+PATH_TESTS = ./tests
+PATH_MODEL = ./model
+
+PATH_DATA = $(PATH_MODEL)/data
+PATH_KERNEL = $(PATH_MODEL)/kernel
+
+PATH_CALC = $(PATH_KERNEL)/calculators
+
+TEST = $(PATH_TESTS)/tests.cc
+SRC = $(PATH_MODEL)/model.cc \
+	$(PATH_KERNEL)/parser.cc $(PATH_KERNEL)/validator.cc \
+	$(PATH_CALC)/calculator.cc $(PATH_CALC)/calculator_credit.cc $(PATH_CALC)/calculator_deposit.cc $(PATH_CALC)/calculator_plot.cc
+
+HEADERS = $(PATH_MODEL)/*.h $(PATH_DATA)/*.h $(PATH_KERNEL)/*.h
+OBJ = $(SRC:.cc=.o)
+LIBA = smart_calc_v2.a
+EXE = smart_calc_v2
+ARCHIVE_DIR = smart_calc_v2
+
 
 OS = $(shell uname)
 
 ifeq ($(OS), Darwin)
-	TST_LIBS=-lcheck -lm -g
+	LIBFLAGS = -lm -lgtest -lstdc++ -lgtest_main
 else
-	TST_LIBS=-lcheck -pthread -lrt -lm -D_GNU_SOURCE -lsubunit -lpthread -g
+	LIBFLAGS =  -lstdc++ `pkg-config --cflags --libs gtest  --libs gtest_main`
 endif
 
 all: install
 
-build:
+build: clean
 	mkdir build
 	cd ./build/ && qmake ../ && make
 
-install:
-	make clean
-	mkdir build
-	qmake -o $(MKF) && make -f $(MKF) && make clean -f $(MKF) && rm $(MKF) && mv SmartCalc.app build  
+install: build
+	cd ./build/ && make clean
+	./build/smartCalc.app/Contents/MacOS/smartCalc
 
 uninstall:
-	rm -rf build*
+	rm -rf build/
 
 dist:
-	rm -rf Archive_SmartCalc_v1.0/
-	mkdir Archive_SmartCalc_v1.0/
-	mkdir Archive_SmartCalc_v1.0/src
-	cp Makefile *.c *.h *.pro *.cpp *.ui *.user Archive_SmartCalc_v1.0/src/
-	tar cvzf Archive_SmartCalc_v1.0.tgz Archive_SmartCalc_v1.0/
-	# mv Archive_SmartCalc_v1.0.tgz $(HOME)/Desktop/
-	rm -rf Archive_SmartCalc_v1.0/
+	rm -rf $(ARCHIVE_DIR)
+	mkdir $(ARCHIVE_DIR)
+	mkdir $(ARCHIVE_DIR)/src
+	cp -r ./view ./controller ./model ./tests dvi.html Makefile $(ARCHIVE_DIR)/src/
+	tar cvzf $(ARCHIVE_DIR).tgz $(ARCHIVE_DIR)
+	rm -rf $(ARCHIVE_DIR)
 
-dvi: 
+dvi:
 	open dvi.html
 
 clean:
-	@rm -rf *.a && rm -rf *.o *.out
-	@rm -rf *.info && rm -rf *.gcda && rm -rf *.gcno &&  rm -rf *.gcov
-	@rm -rf report/ && rm -rf *.
-	@rm -rf calc
-	@rm -rf .qmake.stash	
-	@rm -rf s21_calc
-	@rm -rf ./build*
-	@rm -rf SmartCalc
-	@rm -rf SmartCalc Archive_SmartCalc_v1.0.tgz
+	@rm -rf *.gcda *.o *.a *.gcno *.tgz *.info report build smart_calc_v2 coverage $(ARCHIVE_DIR) $(OBJ)
 
-test: s21_calc.a
-	$(CC) $(CFLAGS) tests.c -L. $(LIBA) $(TST_LIBS) -o $(BUILD_PATH)$(EXE)
-	$(BUILD_PATH)$(EXE)
+%.o: %.cc
+	$(CC) $(CFLAGS) $(LIBFLAGS) -c $^ -o $@
 
-debug: clean # dont use!
-	$(CC) $(CFLAGS) $(SOURCES) -o calc
-	$(BUILD_PATH)calc
+$(LIBA): $(OBJ)
+	ar rcs $(LIBA) $^
 
-rebuild: clean all
+tests: $(LIBA)
+	$(CC) $(CFLAGS) $(TEST) $(LIBFLAGS) $(LIBA) -o $(EXE) -lm
+	./$(EXE)
 
-s21_calc.a: clean
-	$(CC) $(CFLAGS) -c $(SOURCES) -o $(BUILD_PATH)$(LIBO)
-	ar rcs $(LIBA) $(LIBO)
-	ranlib $(LIBA)
-
-gcov_report: s21_calc.a
-	$(CC) $(CFLAGS) $(GCOV_LIBS) tests.c $(SOURCES) $(LIBA) -L. $(LIBA) $(TST_LIBS) -o $(BUILD_PATH)$(EXE)
-	$(BUILD_PATH)$(EXE)
-	lcov -t "test" -c -d $(BUILD_PATH) --output-file $(BUILD_PATH)coverage.info
-	genhtml $(BUILD_PATH)coverage.info --output-directory $(BUILD_PATH)report/
+gcov_report: $(LIBA)
+	$(CC) $(GCOV_LIBS) $(TEST) $(SRC) $(LIBFLAGS) $(LIBA) -o coverage -lm
+	./coverage
+	lcov -t "coverage" -c -d  ./ --no-external --output-file ./coverage.info
+	genhtml ./coverage.info --output-directory ./report/
 	open ./report/index.html
 
+check: $(LIBA)
+	cppcheck --enable=all --suppress=missingIncludeSystem --inconclusive --check-config $(TEST) $(SRC) $(HEADERS)
+	clang-format -i $(TEST) $(SRC) $(HEADERS)
+	clang-format -n $(TEST) $(SRC) $(HEADERS)
 
-leaks:
-	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=RESULT_VALGRIND.txt 	$(BUILD_PATH)$(EXE)
-
-check:
-	@echo
-	@echo ===STYLE TEST===
-	cp ../materials/linters/CPPLINT.cfg CPPLINT.cfg
-	python3 ../materials/linters/cpplint.py --extension=c *.c *.h
-	rm CPPLINT.cfg
+leaks: $(LIBA)
+	$(CC) $(CFLAGS) $(TEST) $(LIBFLAGS) $(LIBA) -o $(EXE) -lm
+ifeq ($(OS), Darwin)
+	leaks -atExit -- ./$(EXE)
+else
+	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=RESULT_VALGRIND.txt ./$(EXE)
+endif
 
 rebuild: clean uninstall all
 
 reinstall: clean uninstall install
+
+.PHONY: all build install uninstall dist dvi clean tests gcov_report check leaks rebuild reinstall

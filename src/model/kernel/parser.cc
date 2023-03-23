@@ -1,6 +1,3 @@
-//
-// Created by Violator Emilie on 3/14/23.
-//
 
 #include "parser.h"
 
@@ -11,12 +8,6 @@ std::list<std::string> s21::Parser::ExpressionToRpn(
 
   for (size_t i = 0; i < expression.size(); ++i) {
     char c = expression[i];
-    // парсер без x
-    //    if (c != ' ' && isdigit(c)) {  // TODO Is it necessary to check
-    //    spaces?
-    //      double d = ParseOfDigitFromExpression(i);
-    //      rpn_expression_.push(std::to_string(d));
-    //      --i;
     if ((isdigit(c) || c == 'X')) {
       std::string d{};
       if (c == 'X') {
@@ -164,12 +155,4 @@ void s21::Parser::UnaryMinusPlus(char c, size_t index,
   if ((c == '-' && (index == 0 || expression[index - 1] == '(')) ||
       (c == '+' && (index == 0 || expression[index - 1] == '(')))
     rpn_expression.push_back("0.0");
-}
-
-void s21::Parser::PrintRpnExpression(std::list<std::string> &rpn_expression) {
-  std::list<std::string> rpn_expression2 = rpn_expression;
-  while (!rpn_expression2.empty()) {
-    std::cout << rpn_expression2.front();
-    rpn_expression2.pop_front();
-  }
 }

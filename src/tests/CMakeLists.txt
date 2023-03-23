@@ -1,8 +1,6 @@
-# 'Google_test' is the subproject name
-cmake_minimum_required(VERSION 3.21.1)
 
-project(Google_tests)
-set(CMAKE_CXX_STANDARD 17)
+# 'Google_test' is the subproject name
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -13,20 +11,26 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-#enable_testing()
+enable_testing()
 
 set(HEADER_FILES
+        ../model/model.h
         ../model/kernel/validator.h
         ../model/kernel/parser.h
-        ../model/kernel/calculator.h
-        ../model/kernel/calculator_plot.h
+        ../model/kernel/calculators/calculator.h
+        ../model/kernel/calculators/calculator_plot.h
+        ../model/kernel/calculators/calculator_deposit.h
+        ../model/kernel/calculators/calculator_credit.h
         )
 
 set(SOURCE_FILES
+        ../model/model.cc
         ../model/kernel/validator.cc
         ../model/kernel/parser.cc
-        ../model/kernel/calculator.cc
-        ../model/kernel/calculator_plot.cc
+        ../model/kernel/calculators/calculator.cc
+        ../model/kernel/calculators/calculator_plot.cc
+        ../model/kernel/calculators/calculator_deposit.cc
+        ../model/kernel/calculators/calculator_credit.cc
         )
 
 add_library(smart_calc STATIC ${SOURCE_FILES} ${HEADER_FILES})
@@ -39,4 +43,4 @@ target_link_libraries(unit_tests
         gtest_main
         )
 
-#add_test(test_all unit_tests)
+add_test(test_all unit_tests)
