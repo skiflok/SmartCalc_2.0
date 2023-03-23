@@ -56,7 +56,7 @@ dvi:
 	open dvi.html
 
 clean:
-	@rm -rf *.gcda *.o *.a *.gcno *.tgz *.info report build smart_calc_v2 coverage $(ARCHIVE_DIR) $(OBJ)
+	@rm -rf *.gcda *.o *.a *.gcno *.tgz *.info report build smart_calc_v2* coverage* $(ARCHIVE_DIR) $(OBJ)
 
 %.o: %.cc
 	$(CC) $(CFLAGS) $(LIBFLAGS) -c $^ -o $@

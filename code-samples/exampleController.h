@@ -3,7 +3,7 @@
 
 #include "exampleModel.h"
 
-class ExampleController 
+class ExampleController
 {
     private:
         ExampleModel *model;
